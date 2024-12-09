@@ -1,4 +1,6 @@
 import streamlit as st
+
+# Kelas untuk Pengelolaan Keuangan
 class PengelolaanKeuangan:
     def __init__(self):
         self.saldo = 0.0
@@ -13,43 +15,55 @@ class PengelolaanKeuangan:
         self.transaksi.append(('Pengeluaran', jumlah, keterangan))
 
     def lihat_saldo(self):
-        print(f"Saldo saat ini: Rp {self.saldo:.2f}")
+        return self.saldo
 
     def lihat_transaksi(self):
-        print("Riwayat Transaksi:")
-        for jenis, jumlah, keterangan in self.transaksi:
-            print(f"{jenis}: Rp {jumlah:.2f} - {keterangan}")
+        return self.transaksi
 
-def menu():
-    keuangan = PengelolaanKeuangan()
-    while True:
-        print("\n--- Aplikasi Pengelolaan Keuangan Pribadi ---")
-        print("1. Tambah Pemasukan")
-        print("2. Tambah Pengeluaran")
-        print("3. Lihat Saldo")
-        print("4. Lihat Transaksi")
-        print("5. Keluar")
-        pilihan = input("Pilih menu: ")
+# Inisialisasi kelas PengelolaanKeuangan
+keuangan = PengelolaanKeuangan()
 
-        if pilihan == '1':
-            jumlah = float(input("Masukkan jumlah pemasukan: Rp "))
-            keterangan = input("Masukkan keterangan: ")
-            keuangan.tambah_pemasukan(jumlah, keterangan)
-            print("Pemasukan berhasil ditambahkan!")
-        elif pilihan == '2':
-            jumlah = float(input("Masukkan jumlah pengeluaran: Rp "))
-            keterangan = input("Masukkan keterangan: ")
-            keuangan.tambah_pengeluaran(jumlah, keterangan)
-            print("Pengeluaran berhasil ditambahkan!")
-        elif pilihan == '3':
-            keuangan.lihat_saldo()
-        elif pilihan == '4':
-            keuangan.lihat_transaksi()
-        elif pilihan == '5':
-            print("Terima kasih telah menggunakan aplikasi!")
-            break
-        else:
-            print("Pilihan tidak valid, silakan coba lagi.")
+# Judul aplikasi
+st.title("Aplikasi Pengelolaan Keuangan Pribadi")
 
-if __name__ == "__main__":
-    menu()
+# Menu navigasi
+menu = ["Tambah Pemasukan", "Tambah Pengeluaran", "Lihat Saldo", "Lihat Transaksi"]
+pilihan = st.sidebar.selectbox("Pilih Menu", menu)
+
+# Tambah Pemasukan
+if pilihan == "Tambah Pemasukan":
+    st.subheader("Tambah Pemasukan")
+    jumlah = st.number_input("Masukkan jumlah pemasukan: Rp", min_value=0.0)
+    keterangan = st.text_input("Masukkan keterangan")
+    if st.button("Tambah"):
+        keuangan.tambah_pemasukan(jumlah, keterangan)
+        st.success("Pemasukan berhasil ditambahkan!")
+
+# Tambah Pengeluaran
+elif pilihan == "Tambah Pengeluaran":
+    st.subheader("Tambah Pengeluaran")
+    jumlah = st.number_input("Masukkan jumlah pengeluaran: Rp", min_value=0.0)
+    keterangan = st.text_input("Masukkan keterangan")
+    if st.button("Tambah"):
+        keuangan.tambah_pengeluaran(jumlah, keterangan)
+        st.success("Pengeluaran berhasil ditambahkan!")
+
+# Lihat Saldo
+elif pilihan == "Lihat Saldo":
+    st.subheader("Lihat Saldo")
+    saldo = keuangan.lihat_saldo()
+    st.write(f"Saldo saat ini: Rp {saldo:.2f}")
+
+# Lihat Transaksi
+elif pilihan == "Lihat Transaksi":
+    st.subheader("Lihat Transaksi")
+    transaksi = keuangan.lihat_transaksi()
+    if transaksi:
+        for jenis, jumlah, keterangan in transaksi:
+            st.write(f"{jenis}: Rp {jumlah:.2f} - {keterangan}")
+    else:
+        st.write("Belum ada transaksi")
+
+# Menjalankan aplikasi Streamlit
+if __name__ == '__main__':
+    st.set_page_config(page_title="Pengelolaan Keuangan Pribadi")
