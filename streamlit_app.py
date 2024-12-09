@@ -1,5 +1,8 @@
 import streamlit as st
 
+# Set page configuration at the very beginning of the script
+st.set_page_config(page_title="Pengelolaan Keuangan Pribadi")
+
 # Kelas untuk Pengelolaan Keuangan
 class PengelolaanKeuangan:
     def __init__(self):
